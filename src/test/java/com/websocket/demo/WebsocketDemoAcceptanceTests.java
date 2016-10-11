@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
 public class WebsocketDemoAcceptanceTests {
-	StompSession stompSession;
+	StompSession stompSession1;
 	List<Greeting> greetingsList = new ArrayList<>();
 	
 	@Before
@@ -42,9 +42,8 @@ public class WebsocketDemoAcceptanceTests {
 		WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
 		stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 		ListenableFuture<StompSession> stompSessionFuture = stompClient.connect("ws://localhost:8080/gs-guide-websocket", new MyWebSocketHandler());
-		stompSession = stompSessionFuture.get();
-        
-        stompSession.subscribe("/topic/greetings", new StompFrameHandler() {
+		stompSession1 = stompSessionFuture.get();
+        stompSession1.subscribe("/topic/greetings", new StompFrameHandler() {
         	
 		    @Override
 		    public Type getPayloadType(StompHeaders headers) {
@@ -60,14 +59,14 @@ public class WebsocketDemoAcceptanceTests {
 	}
 
 	@Test
-	public void should_doSomething_when_somethingIsPerformed() throws InterruptedException {
-		stompSession.send("/app/hello", "Shoabe");
+	public void should_receiveMessageFromBroker_when_messageIsConsumedFromASubscribedTopic() throws InterruptedException {
+		stompSession1.send("/app/hello", "Shoabe");
 		Thread.sleep(2000);
 		
-		assertThatMessageInBroker("Shoabe");	
+		assertThatMessageReceivedFromBroker("Shoabe");	
 	}
 	
-	private boolean assertThatMessageInBroker(String name) {
+	private boolean assertThatMessageReceivedFromBroker(String name) {
 		for(Greeting greeting : greetingsList) {
 			if (greeting.getContent().contains(name)) {
 				return true;

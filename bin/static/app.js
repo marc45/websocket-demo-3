@@ -48,3 +48,6 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
 });
+
+connect();
+stompClient.send("/app/hello", {}, JSON.stringify({'name': 'kick'}));
