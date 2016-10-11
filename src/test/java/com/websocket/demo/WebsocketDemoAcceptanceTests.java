@@ -27,14 +27,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-/**
- * 
-WebSocketClient webSocketClient = new StandardWebSocketClient();
-WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
-stompClient.setMessageConverter(new StringMessageConverter());
-stompClient.setTaskScheduler(taskScheduler);
- *
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
 public class WebsocketDemoAcceptanceTests {
